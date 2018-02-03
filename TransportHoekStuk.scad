@@ -2,31 +2,40 @@ lengte = 80;
 hoogte = 30;
 dikte = 3;
 boorDiameter = 7;
-m6Diameter = 11;
+m6Diameter = 11.8;
 m6Hoogte = 6;
-zijkantRadius=10;
+zijkantRadius=m6Diameter;//4;
+holderDikte=5;
+boutLengte=36;
+boutDiameter=6;
+toonBouten=false;
+fn=180;
 
 module moerHouder(randFactor=2) {
     difference() {
-        cylinder(d=m6Diameter*randFactor, h=m6Hoogte, $fn=12);
+        cylinder(d=m6Diameter*randFactor, h=m6Hoogte, $fn=fn);
         cylinder(d=m6Diameter, h=m6Hoogte, $fn=6);
     }
 }
 
 module zijkant() {
-    gatX = hoogte*0.7;
-    gatY = hoogte*0.7;
+    gatX = hoogte*0.75;
+    gatY = hoogte*0.75;
     union() {
         difference() {
             union() {
-                translate([hoogte-zijkantRadius,hoogte-zijkantRadius,0]) cylinder(r=zijkantRadius, h=dikte);
-                cube([hoogte-zijkantRadius,hoogte-zijkantRadius,dikte]);
+                translate([gatX,gatY,0]) cylinder(r=zijkantRadius, h=dikte, $fn=fn);
+                cube([hoogte,hoogte,dikte]);
+                /*cube([hoogte-zijkantRadius,hoogte-zijkantRadius,dikte]);
                 cube([hoogte,hoogte-zijkantRadius,dikte]);
-                cube([hoogte-zijkantRadius,hoogte,dikte]);
+                cube([hoogte-zijkantRadius,hoogte,dikte]);*/
             }
-            translate([gatX,gatY,0]) cylinder(d=boorDiameter, h=dikte, center=false);
+            translate([gatX,gatY,0]) cylinder(d=boorDiameter, h=dikte, center=false, $fn=fn);
         }
-        translate([gatX,gatY,dikte]) moerHouder(1.5);
+        if (toonBouten) {
+            color([1,0.5,0]) translate([gatX,gatY,0]) cylinder(d=boutDiameter, h=boutLengte, center=false, $fn=fn);
+        }
+        translate([gatX,gatY,dikte]) moerHouder();
     }
 }
 
@@ -44,14 +53,26 @@ module bovenkant() {
     union() {
         difference() {
             cube([lengte, hoogte, dikte]);
-            translate([gatX,gatY,0]) cylinder(d=boorDiameter, h=dikte, center=false);
+            translate([gatX,gatY,0]) cylinder(d=boorDiameter, h=dikte, center=false, $fn=fn);
+        }
+        if (toonBouten) {
+            color([1,0.5,0]) translate([gatX,gatY,0]) cylinder(d=boutDiameter, h=boutLengte, center=false, $fn=fn);
         }
         translate([gatX,gatY,dikte]) moerHouder();
     }
 }
 
 module voorkant() {
-    translate([lengte,0,hoogte]) mirror([0,1,0]) rotate([90,180,0]) bovenkant();
+    holderX1 = (lengte/6);
+    holderX2 = lengte - holderX1;
+    holderY = hoogte/2;
+    union() {
+        translate([lengte,0,hoogte]) mirror([0,1,0]) rotate([90,180,0]) bovenkant();
+        translate([holderX1,-holderDikte/2,holderY]) 
+            rotate([-90,0,0]) cylinder(d=boorDiameter, h=holderDikte, center=true, $fn=fn);
+        translate([holderX2,-holderDikte/2,holderY]) 
+            rotate([-90,0,0]) cylinder(d=boorDiameter, h=holderDikte, center=true, $fn=fn);
+    }
 }
 
 module all() {
@@ -63,5 +84,6 @@ module all() {
     }
 }
 
+//moerHouder(1.5);
 //zijkant();
 all();
