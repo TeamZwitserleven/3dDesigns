@@ -63,5 +63,5 @@ module all() {
     }
 }
 
-zijkant();
-//all();
+//zijkant();
+all();
