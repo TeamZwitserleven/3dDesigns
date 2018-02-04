@@ -1,17 +1,20 @@
-lengte = 80;
+lengte = 50;
 hoogte = 30;
 dikte = 3;
 boorDiameter = 7;
-m6Diameter = 11.8;
+m6Diameter = 11.7;
 m6Hoogte = 6;
 zijkantRadius=m6Diameter;//4;
 holderDikte=5;
 boutLengte=36;
 boutDiameter=6;
 toonBouten=false;
+holderX1 = (lengte/5.5);
+holderX2 = lengte - holderX1;
+holderY = hoogte/2;
 fn=180;
 
-module moerHouder(randFactor=2) {
+module moerHouder(randFactor=1.6) {
     difference() {
         cylinder(d=m6Diameter*randFactor, h=m6Hoogte, $fn=fn);
         cylinder(d=m6Diameter, h=m6Hoogte, $fn=6);
@@ -24,11 +27,11 @@ module zijkant() {
     union() {
         difference() {
             union() {
-                translate([gatX,gatY,0]) cylinder(r=zijkantRadius, h=dikte, $fn=fn);
-                cube([hoogte,hoogte,dikte]);
-                /*cube([hoogte-zijkantRadius,hoogte-zijkantRadius,dikte]);
+                translate([gatX,gatY,0]) cylinder(r=zijkantRadius*0.8, h=dikte, $fn=fn);
+                //cube([hoogte,hoogte,dikte]);
+                cube([hoogte-zijkantRadius,hoogte-zijkantRadius,dikte]);
                 cube([hoogte,hoogte-zijkantRadius,dikte]);
-                cube([hoogte-zijkantRadius,hoogte,dikte]);*/
+                cube([hoogte-zijkantRadius,hoogte,dikte]);
             }
             translate([gatX,gatY,0]) cylinder(d=boorDiameter, h=dikte, center=false, $fn=fn);
         }
@@ -63,9 +66,6 @@ module bovenkant() {
 }
 
 module voorkant() {
-    holderX1 = (lengte/6);
-    holderX2 = lengte - holderX1;
-    holderY = hoogte/2;
     union() {
         translate([lengte,0,hoogte]) mirror([0,1,0]) rotate([90,180,0]) bovenkant();
         translate([holderX1,-holderDikte/2,holderY]) 
