@@ -75,6 +75,19 @@ module voorkant() {
     }
 }
 
+module boormal() {
+    difference() {
+        difference() {
+            bovenkant();
+            translate([0,0,dikte/2]) cube([lengte, hoogte, hoogte]);
+        }
+        translate([holderX1,holderY,holderDikte/2]) 
+            cylinder(d=boorDiameter, h=holderDikte, center=true, $fn=fn);
+        translate([holderX2,holderY,holderDikte/2]) 
+            cylinder(d=boorDiameter, h=holderDikte, center=true, $fn=fn);
+    }
+}
+
 module all() {
     union() {
         zijkantLinks();
@@ -82,8 +95,7 @@ module all() {
         voorkant();
         zijkantRechts();
     }
+    translate([lengte+10,0,0]) boormal();
 }
 
-//moerHouder(1.5);
-//zijkant();
 all();
