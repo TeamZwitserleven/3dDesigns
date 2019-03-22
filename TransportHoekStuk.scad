@@ -88,6 +88,16 @@ module boormal() {
     }
 }
 
+module moerHouderAfdekplaat(randFactor=1.6) {
+    d = (m6Diameter*randFactor)+0.5;
+    difference() {
+        cylinder(d=d*1.2, h=2, $fn=fn);
+        cylinder(d=boorDiameter, h=m6Hoogte, $fn=fn);
+        translate([0,0,1]) cylinder(d=d, h=1.5, $fn=fn);
+        translate([-d, d/3-1, 0]) cube([d*2,d,d]);
+    }
+}
+
 module all() {
     union() {
         zijkantLinks();
@@ -96,6 +106,8 @@ module all() {
         zijkantRechts();
     }
     translate([lengte+10,0,0]) boormal();
+    translate([-m6Diameter*2,0,0]) moerHouderAfdekplaat();
 }
 
-all();
+moerHouderAfdekplaat();
+//all();
