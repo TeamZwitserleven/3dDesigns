@@ -57,7 +57,7 @@ module moer() {
                     cylinder(d=voetD, h=3, $fn=8);
                 cylinder(d=threadOuterRad*2+10, h=nutHeight, $fn=8, center=true);
             }
-			cylinder(r=irad, h=nutHeight+0.1, center=true);
+            cylinder(r=irad, h=nutHeight+0.1, center=true);
             union() {
 				translate([0,0,-nutHeight/2]) thread(orad, nutHeight, lead);
 				translate([0,0,-nutHeight/2]) cylinder(r1=orad, r2=irad, h=lead, center=true);
@@ -72,8 +72,32 @@ module moer() {
     }*/
 }
 
+module voetplaat() {
+    voetD = paalDiamBuiten*2;
+    plaatD = 92;//paalDiamBuiten*2.5;
+    gatOffset = (plaatD + voetD) / 4;
+    gatD = 2;
+    h=3;
+    difference() {
+        cylinder(d=plaatD, h=h);
+        translate([gatOffset,0,0])
+            cylinder(d=gatD, h=h);
+        translate([-gatOffset,0,0])
+            cylinder(d=gatD, h=h);
+        translate([0,gatOffset,0])
+            cylinder(d=gatD, h=h);
+        translate([0,-gatOffset,0])
+            cylinder(d=gatD, h=h);
+        rotate([0,0,22.5])
+            cylinder(d=voetD+1, h=h, $fn=8);
+    }
+}
+
 translate([-100,0,0])
     paalHouder(h=20, tl=0, voetD=paalDiamBuiten+10);
 translate([100,0,0])
     moer();
-voet();
+translate([100,100,0])
+    voet();
+
+voetplaat();
