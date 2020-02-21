@@ -1,3 +1,5 @@
+include <roundedcube.scad>
+
 wall = 3;
 outerWidth = 25;
 innerWidth = outerWidth - 2*wall;
@@ -6,10 +8,33 @@ innerHeight = outerHeight - 2*wall;
 
 insertWidth = 15;
 insertHeight = 50;
+insertWall = 2;
 
 fn = 36;
 h = 20;
 space = 0.5;
+
+module eindStuk() {
+    h = 7;
+    endWidth = insertWidth;
+    endHeight = insertHeight + 30;
+    space = 0.1;
+    wx = space+2*insertWall;
+    wy = space+2*insertWall;
+    difference() {
+        union() {
+            translate([0, 0, 2])
+            cube([insertWidth, insertHeight, h-2]);
+            roundedcube([endWidth, endHeight, h], false, 2, "all");
+            translate([wx/2, wy/2, h]) {
+                union() {
+                    roundedcube([insertWidth-wx, insertHeight-wy, 20], false, 1, "zmax");
+                    //cube([insertWidth-wx, insertHeight-wy, 10]);
+                }
+            }
+        }
+    }
+}
 
 module binnenGeleider() {
     dx = ((innerWidth-space) - (insertWidth)) / 2;
@@ -68,6 +93,10 @@ module afdekGoot() {
     }
 }
 
+
+rotate([0, 0, 90])
+translate([-60, 0, 0])
+    eindStuk();
 
 rotate([0, 0, 90])
 translate([-30, 0, 0])
