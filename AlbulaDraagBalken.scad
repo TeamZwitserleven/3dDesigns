@@ -6,8 +6,8 @@ innerWidth = outerWidth - 2*wall;
 outerHeight = 60;
 innerHeight = outerHeight - 2*wall;
 
-insertWidth = 15;
-insertHeight = 50;
+insertWidth = 15.2;
+insertHeight = 50.2;
 insertWall = 2;
 
 fn = 36;
@@ -37,11 +37,14 @@ module eindStuk() {
 }
 
 module binnenGeleider() {
+    h = 30;
+    space = 0.3;
     dx = ((innerWidth-space) - (insertWidth)) / 2;
     dy = ((innerHeight-space) - (insertHeight)) / 2;
     difference() {
         union() {
-            cube([innerWidth-space, innerHeight-space, h]);
+            roundedcube([innerWidth-space, innerHeight-space, h], false, 2, "zmin");
+            //cube([innerWidth-space, innerHeight-space, h]);
         }
         translate([dx, dy, 3]) {
             cube([insertWidth, insertHeight, h-3]);
@@ -63,14 +66,15 @@ module tussenGeleider() {
 }
 
 module buitenGeleider() {
-    h = 20;
+    h = 30;
+    space = 0.3;
     dx = (outerWidth - (insertWidth + space)) / 2;
     dy = (outerHeight - (insertHeight + space)) / 2;
     difference() {
         union() {
             cube([outerWidth, outerHeight, 3]);
             translate([wall+space/2, wall+space/2, 0])
-                cube([innerWidth-space, innerHeight-space, h]);
+                roundedcube([innerWidth-space, innerHeight-space, h], false, 2, "zmax");
         }
         translate([dx, dy, 0]) {
             cube([insertWidth+space, insertHeight+space, h]);
@@ -93,23 +97,29 @@ module afdekGoot() {
     }
 }
 
-
+/*
 rotate([0, 0, 90])
 translate([-60, 0, 0])
     eindStuk();
-
+*/
+/*
 rotate([0, 0, 90])
 translate([-30, 0, 0])
     binnenGeleider();
+*/
 
+/*
 rotate([0, 0, 90])
 translate([0, 0, 0])
     tussenGeleider();
-    
+*/
+
 rotate([0, 0, 90])
 translate([30, 0, 0])
     buitenGeleider();
 
+/*
 rotate([0, 0, 90])
 translate([60, 0, 0])
     afdekGoot();
+*/
